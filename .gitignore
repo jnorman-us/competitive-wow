@@ -1,0 +1,5 @@
+users.csv
+maps/*.txt
+out
+.idea
+src/ai/Main.java
