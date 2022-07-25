@@ -41,14 +41,12 @@ public class Canvas extends JPanel {
         for(Player player : directory.getPlayers().values()) {
             Vector position = player.getPosition();
             if(!slots.containsKey(position)) {
-                System.out.println("WTFFFF");
                 slots.put(position, 0);
             }
             int slot = slots.get(position);
             player.draw(g2d, TILE_SIZE, slot);
             slots.put(position, slot + 1);
         }
-        System.out.println(slots);
     }
 
     private void clear(Graphics2D g) {

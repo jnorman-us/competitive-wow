@@ -67,6 +67,7 @@ public class Client implements Runnable {
 
     public void send(Message message) {
         try {
+            System.out.println(message);
             writer.writeObject(message);
         } catch(IOException e) {
             if(running.get()) {

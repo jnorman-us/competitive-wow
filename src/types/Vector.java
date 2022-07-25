@@ -96,8 +96,7 @@ public class Vector implements Serializable {
 
     @Override
     public int hashCode() {
-        int code =  Objects.hash(x, y);
-        System.out.println(this + "->" + code);
+        int code = Objects.hash(x, y);
         return code;
     }
 

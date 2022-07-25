@@ -124,8 +124,10 @@ public class Player extends Robot {
             g.setColor(Color.BLUE);
             g.fill(new Ellipse2D.Double(offset.X(), offset.Y(), size, size));
         } else {
+            offset.add(size * 1 / 6, 0);
             g.setColor(Color.GRAY);
-            g.drawRect(offset.X(), offset.Y(), size * 2 / 3, size);
+            g.fillRect(offset.X(), offset.Y(), size * 2 / 3, size);
+            offset.add(size * -1 / 6, 0);
         }
 
         g.setColor(Color.WHITE);

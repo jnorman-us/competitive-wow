@@ -22,6 +22,12 @@ public class User {
     }
 
     @Override
+    public boolean equals(Object o) {
+        User u = (User) o;
+        return username.equals(u.username);
+    }
+
+    @Override
     public int hashCode() {
         return username.hashCode();
     }

@@ -70,7 +70,9 @@ public class Game implements Receiver, Bounds, EntityDirectory {
             for (User user : players.keySet()) {
                 Player player = players.get(user);
                 player.resetReceived();
-                publisher.sendMessage(user, player.generateRequestThink());
+                if(!player.isDead()) {
+                    publisher.sendMessage(user, player.generateRequestThink());
+                }
             }
             while(!roundFinished()) {
                 roundFinishedCondition.await();
@@ -117,7 +119,7 @@ public class Game implements Receiver, Bounds, EntityDirectory {
         try {
             Player player = players.get(user);
 
-            if(!player.hasReceived()) {
+            if(!player.hasReceived() && !player.isDead()) {
                 player.clearSensors();
                 player.move(message.movement());
 
