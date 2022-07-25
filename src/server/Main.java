@@ -4,6 +4,7 @@ import game.Game;
 import game.Publisher;
 import game.WorldMap;
 import types.User;
+import ui.Window;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ public class Main {
             return;
         }
 
+        Window window = new Window(players);
+
         // INITIALIZE GAME
         Server server = null;
         try {
@@ -45,6 +48,10 @@ public class Main {
         Game game = new Game(players);
         server.setReceiver(game);
         game.setPublisher(server);
+
+        window.setDirectory(game);
+        server.setOnlineListener(window);
+        game.setStatusListener(window);
 
         // FOR EACH WORLD MAP, PLAY THE GAME
         File mapDirectory = new File(mapsDirectoryPath);
@@ -66,11 +73,17 @@ public class Main {
 
                 while(!game.finished()) {
                     game.playRound();
+                    Thread.sleep(500);
+                    window.roundComplete();
                 }
+                Thread.sleep(1000);
+                window.matchComplete();
             } catch (IOException e) {
                 System.out.println("Failed to read world file");
                 e.printStackTrace();
                 return;
+            } catch(InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }

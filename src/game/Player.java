@@ -1,13 +1,10 @@
 package game;
 
-import game.Game;
-import game.Gold;
+import obstacles.Gold;
 import messages.AcquiredGold;
-import messages.Decision;
 import messages.Died;
 import messages.RequestThink;
 import robot.Robot;
-import types.Bounds;
 import types.Direction;
 import types.User;
 import types.Vector;
@@ -36,6 +33,7 @@ public class Player extends Robot {
 
     public void kill() {
         dead = true;
+        game.statusListener.playerDied(user);
     }
 
     public boolean hasReceived() {
@@ -91,6 +89,7 @@ public class Player extends Robot {
     public void acquire(Gold g) {
         goldCollected.add(g);
         game.publisher.sendMessage(this.user, new AcquiredGold(position, goldCollected()));
+        game.statusListener.playerGoldUpdate(user, goldCollected());
     }
 
     public void setWindy() {

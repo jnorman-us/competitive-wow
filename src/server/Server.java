@@ -16,6 +16,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Server implements Runnable, Publisher {
     private Receiver receiver;
+    private OnlineListener onlineListener;
 
     private AtomicBoolean running;
     private Thread thread;
@@ -48,6 +49,10 @@ public class Server implements Runnable, Publisher {
 
     public void setReceiver(Receiver receiver) {
         this.receiver = receiver;
+    }
+
+    public void setOnlineListener(OnlineListener listener) {
+        onlineListener = listener;
     }
 
     public void start() {
@@ -103,6 +108,8 @@ public class Server implements Runnable, Publisher {
                 if(actual.checkPassword(password)) {
                     headlessClients.remove(headless);
                     clients.put(actual, headless);
+                    onlineListener.userConnected(actual);
+
                     System.out.println(username + " has connected!");
                 }
             } else {
@@ -133,6 +140,8 @@ public class Server implements Runnable, Publisher {
             if(user != null) {
                 receiver.userDisconnected(user);
                 clients.remove(user);
+                onlineListener.userDisconnected(user);
+
                 System.out.println(user.getUsername() + " has disconnected!");
             } else {
                 headlessClients.remove(client);

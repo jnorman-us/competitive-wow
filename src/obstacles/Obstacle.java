@@ -1,5 +1,6 @@
-package game;
+package obstacles;
 
+import game.Player;
 import types.Vector;
 
 public abstract class Obstacle {

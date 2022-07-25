@@ -1,20 +1,21 @@
 package game;
 
+import obstacles.Obstacle;
 import messages.Decision;
 import messages.InitWorld;
 import server.Receiver;
 import types.Bounds;
 import types.User;
 import types.Vector;
+import ui.EntityDirectory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class Game implements Receiver, Bounds {
+public class Game implements Receiver, Bounds, EntityDirectory {
     public Publisher publisher;
+    public PlayerStatusListener statusListener;
 
     private int width, height;
     private HashMap<User, Player> players;
@@ -39,6 +40,10 @@ public class Game implements Receiver, Bounds {
 
     public void setPublisher(Publisher publisher) {
         this.publisher = publisher;
+    }
+
+    public void setStatusListener(PlayerStatusListener statusListener) {
+        this.statusListener = statusListener;
     }
 
     public void initFromMap(WorldMap map) {
@@ -108,7 +113,6 @@ public class Game implements Receiver, Bounds {
 
     @Override
     public void receiveDecision(User user, Decision message) {
-        System.out.println(user + "> " + message.movement());
         lock.lock();
         try {
             Player player = players.get(user);
@@ -120,6 +124,7 @@ public class Game implements Receiver, Bounds {
                 for(Obstacle obstacle : obstacles) {
                     obstacle.calculateOnTop(player);
                 }
+                statusListener.playerResponded(user);
             }
         } finally {
             roundFinishedCondition.signalAll();
@@ -130,5 +135,15 @@ public class Game implements Receiver, Bounds {
     @Override
     public Vector high() {
         return new Vector(width, height);
+    }
+
+    @Override
+    public List<Obstacle> getObstacles() {
+        return obstacles;
+    }
+
+    @Override
+    public Map<User, Player> getPlayers() {
+        return players;
     }
 }

@@ -1,19 +1,20 @@
-package game;
+package obstacles;
 
+import game.Player;
 import types.Vector;
 
-public class Monster extends Obstacle {
-    public Monster(Vector vector) {
+public class Pit extends Obstacle {
+    public Pit(Vector vector) {
         super(vector);
     }
 
     @Override
     public void adjacentEffect(Player player) {
-        player.setSmelly();
+        player.setWindy();
     }
 
     @Override
     public void onTopEffect(Player player) {
-        player.eat();
+        player.fall();
     }
 }

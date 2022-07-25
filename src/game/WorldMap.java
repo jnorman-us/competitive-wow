@@ -1,5 +1,8 @@
 package game;
 
+import obstacles.Gold;
+import obstacles.Monster;
+import obstacles.Pit;
 import types.Vector;
 
 import java.io.*;
