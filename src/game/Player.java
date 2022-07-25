@@ -9,6 +9,8 @@ import types.Direction;
 import types.User;
 import types.Vector;
 
+import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.util.HashSet;
 
 public class Player extends Robot {
@@ -105,5 +107,30 @@ public class Player extends Robot {
         smelly = false;
         windy = false;
         shiny = false;
+    }
+
+    public void draw(Graphics2D g, int tileSize, int slot) {
+        int size = tileSize / 2;
+        Vector offset = getPosition().copy();
+        offset.scale(tileSize);
+        if(slot == 1) {
+            offset.add(size, 0);
+        } else if(slot == 2) {
+            offset.add(0, size);
+        } else if(slot >= 3) {
+            offset.add(size, size);
+        }
+        if(!isDead()) {
+            g.setColor(Color.BLUE);
+            g.fill(new Ellipse2D.Double(offset.X(), offset.Y(), size, size));
+        } else {
+            g.setColor(Color.GRAY);
+            g.drawRect(offset.X(), offset.Y(), size * 2 / 3, size);
+        }
+
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Courier New", Font.PLAIN, tileSize / 6));
+        offset.add(tileSize / 5 * 0, tileSize / 10 * 3);
+        g.drawString(user.getUsername().substring(0, 5), offset.X(), offset.Y());
     }
 }

@@ -3,8 +3,10 @@ package obstacles;
 import game.Player;
 import types.Vector;
 
+import java.awt.*;
+
 public abstract class Obstacle {
-    private Vector position;
+    protected Vector position;
 
     protected Obstacle() {
 
@@ -16,6 +18,7 @@ public abstract class Obstacle {
 
     public abstract void adjacentEffect(Player player);
     public abstract void onTopEffect(Player player);
+    public abstract void draw(Graphics2D g, int tileSize);
 
     public void calculateOnTop(Player player) {
         if(position.checkAdjacent(player.getPosition())) {

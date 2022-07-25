@@ -6,36 +6,67 @@ import server.OnlineListener;
 import types.User;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.HashMap;
 import java.util.List;
 
-public class Window extends JFrame implements PlayerStatusListener, FlowListener, OnlineListener {
+public class Window implements PlayerStatusListener, FlowListener, OnlineListener {
     private EntityDirectory directory;
 
     private Scoreboard scoreboard;
+    private Canvas canvas;
+
+    private JFrame scoreboardWindow;
+    private JFrame canvasWindow;
 
     public Window(List<User> users) {
         scoreboard = new Scoreboard(users);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Scrollable JTable");
-        setContentPane(scoreboard);
-        pack();
-        setVisible(true);
+        canvas = new Canvas();
+    }
+
+    public void showScoreboard() {
+        JFrame window = new JFrame();
+        window.setTitle("Competitive WoW - Scoreboard");
+        window.add(scoreboard);
+        window.setVisible(true);
+        window.pack();
+
+        scoreboardWindow = window;
+    }
+
+    public void showCanvas() {
+        JFrame window = new JFrame();
+        window.setTitle("Competitive WoW - Map");
+        window.add(canvas);
+        window.setVisible(true);
+        window.pack();
+
+        canvasWindow = window;
     }
 
     public void setDirectory(EntityDirectory directory) {
-        this.directory = directory;
+        canvas.setDirectory(directory);
     }
 
     @Override
-    public void roundComplete() {
+    public void roundStart() {
+        canvas.update();
+        canvas.repaint();
+    }
+
+    @Override
+    public void roundFinish() {
         scoreboard.updateAll(UserCols.RESPONDED, BooleanCol.FALSE);
+        canvas.repaint();
     }
 
     @Override
-    public void matchComplete() {
+    public void matchStart() {
+        canvas.init();
+        canvasWindow.pack();
+    }
+
+    @Override
+    public void matchFinish() {
         scoreboard.updateAll(UserCols.DEAD, BooleanCol.FALSE);
         scoreboard.updateAll(UserCols.GOLD, "" + 0);
     }

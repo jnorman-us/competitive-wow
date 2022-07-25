@@ -52,6 +52,8 @@ public class Main {
         window.setDirectory(game);
         server.setOnlineListener(window);
         game.setStatusListener(window);
+        window.showScoreboard();
+        window.showCanvas();
 
         // FOR EACH WORLD MAP, PLAY THE GAME
         File mapDirectory = new File(mapsDirectoryPath);
@@ -70,14 +72,16 @@ public class Main {
                 System.out.println("Starting world " + mapFile);
                 WorldMap world = new WorldMap(mapFile);
                 game.initFromMap(world);
+                window.matchStart();
 
                 while(!game.finished()) {
+                    window.roundStart();
                     game.playRound();
                     Thread.sleep(500);
-                    window.roundComplete();
+                    window.roundFinish();
                 }
                 Thread.sleep(1000);
-                window.matchComplete();
+                window.matchFinish();
             } catch (IOException e) {
                 System.out.println("Failed to read world file");
                 e.printStackTrace();

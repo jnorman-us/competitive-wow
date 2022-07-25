@@ -18,7 +18,6 @@ public class Scoreboard extends JPanel {
                 "Online", "Username", "Responded", "Dead", "Gold", "Score",
         });
         table = new JTable(model);
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         userRows = new HashMap<>();
         for(User user : users) {
@@ -28,10 +27,7 @@ public class Scoreboard extends JPanel {
             userRows.put(user, model.getRowCount() - 1);
         }
 
-
         JScrollPane scrollPane = new JScrollPane(table);
-        setLayout(new BorderLayout());
-        setSize(800, 500);
         setOpaque(true);
         add(scrollPane);
     }

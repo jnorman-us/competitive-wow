@@ -1,6 +1,7 @@
 package types;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Vector implements Serializable {
     private int x, y;
@@ -30,9 +31,28 @@ public class Vector implements Serializable {
         this.y = y;
     }
 
-    public void copy(Vector o) {
+    public void set(Vector o) {
         this.x = o.x;
         this.y = o.y;
+    }
+
+    public void scale(double factor) {
+        this.x *= factor;
+        this.y *= factor;
+    }
+
+    public void add(Vector o) {
+        this.x += o.x;
+        this.y += o.y;
+    }
+
+    public void add(int x, int y) {
+        this.x += x;
+        this.y += y;
+    }
+
+    public Vector copy() {
+        return new Vector(x, y);
     }
 
     public int X() {
@@ -68,13 +88,17 @@ public class Vector implements Serializable {
         return false;
     }
 
-    public boolean equals(Vector o) {
-        return x == o.x && y == o.y;
+    @Override
+    public boolean equals(Object o) {
+        Vector v = (Vector) o;
+        return x == v.x && y == v.y;
     }
 
     @Override
     public int hashCode() {
-        return new String(x + "," + y).hashCode();
+        int code =  Objects.hash(x, y);
+        System.out.println(this + "->" + code);
+        return code;
     }
 
     @Override

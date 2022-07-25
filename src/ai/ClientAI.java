@@ -33,7 +33,7 @@ public abstract class ClientAI extends Robot implements Receiver {
 
     @Override
     public void receiveRequestThink(RequestThink message) {
-        position.copy(message.currentPosition);
+        position.set(message.currentPosition);
         smelly = message.smelly;
         windy = message.windy;
         shiny = message.shiny;
