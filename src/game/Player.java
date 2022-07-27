@@ -4,8 +4,10 @@ import obstacles.Gold;
 import messages.AcquiredGold;
 import messages.Died;
 import messages.RequestThink;
+import obstacles.Monster;
+import obstacles.Obstacle;
 import robot.Robot;
-import types.Direction;
+import types.Action;
 import types.User;
 import types.Vector;
 
@@ -17,8 +19,10 @@ public class Player extends Robot {
     private Game game;
 
     private User user;
+    private int score;
     private boolean dead;
     private boolean received;
+    private HashSet<Monster> monstersKilled;
     private HashSet<Gold> goldCollected;
 
     public Player(Game g, User user, Vector p) {
@@ -27,82 +31,102 @@ public class Player extends Robot {
         this.game = g;
 
         goldCollected = new HashSet<>();
+        monstersKilled = new HashSet<>();
+    }
+
+    private void addToScore(int toAdd) {
+        score += toAdd;
+        game.statusListener.playerScoreUpdate(user, score);
     }
 
     public boolean isDead() {
         return dead;
     }
-
     public void kill() {
         dead = true;
+        game.publisher.sendMessage(this.user, new Died(position));
         game.statusListener.playerDied(user);
     }
-
     public boolean hasReceived() {
         return received;
     }
-
     public void resetReceived() {
         received = false;
     }
-
-    public void move(Direction direction) {
-        received = true;
-        position.move(direction);
-        position.enforceBounds(bounds);
-    }
-
     public void reset() {
         clearSensors();
         dead = false;
+        score = 0;
         position.set(0, 0);
         goldCollected.clear();
+        monstersKilled.clear();
     }
 
-    public RequestThink generateRequestThink() {
-        return new RequestThink(position, smelly, windy, shiny);
+    public void act(Action direction) {
+        received = true;
+        switch(direction) {
+            case MOVE_UP:
+            case MOVE_DOWN:
+            case MOVE_LEFT:
+            case MOVE_RIGHT:
+                position.move(direction);
+                position.enforceBounds(bounds);
+                addToScore(-10); // all actions incur a 10pt cost
+                return;
+        }
+
+        Vector shootAt = getPosition().copy();
+        switch(direction) {
+            case SHOOT_UP:
+                shootAt.add(0, -1);
+                break;
+            case SHOOT_DOWN:
+                shootAt.add(0, 1);
+                break;
+            case SHOOT_LEFT:
+                shootAt.add(-1, 0);
+                break;
+            case SHOOT_RIGHT:
+                shootAt.add(1, 0);
+                break;
+        }
+        addToScore(-250); // all shooting incur a 200pt cost
+
+        Monster shotMonster = game.getMonsterAt(shootAt);
+        if(shotMonster != null) {
+            killMonster(shotMonster);
+        }
     }
 
-    public Vector getPosition() {
-        return position;
-    }
-
-    public void setSmelly() {
-        smelly = true;
-    }
-
-    public void eat() {
-        kill();
-        game.publisher.sendMessage(this.user, new Died(position));
-    }
-
-    public void setShiny() {
-        shiny = true;;
+    public boolean alreadyKilled(Monster m) { return monstersKilled.contains(m); }
+    public int monstersKilled() { return monstersKilled.size(); }
+    public void killMonster(Monster m) {
+        monstersKilled.add(m);
+        addToScore(500);
     }
 
     public boolean alreadyCollected(Gold g) {
         return goldCollected.contains(g);
     }
-
     public int goldCollected() {
         return goldCollected.size();
     }
-
     public void acquire(Gold g) {
         goldCollected.add(g);
+        addToScore(500);
         game.publisher.sendMessage(this.user, new AcquiredGold(position, goldCollected()));
         game.statusListener.playerGoldUpdate(user, goldCollected());
     }
 
+    public void setSmelly() {
+        smelly = true;
+    }
     public void setWindy() {
         windy = true;
     }
-
-    public void fall() {
-        kill();
-        game.publisher.sendMessage(this.user, new Died(position));
+    public void setShiny() {
+        shiny = true;
     }
-
     public void clearSensors() {
         smelly = false;
         windy = false;

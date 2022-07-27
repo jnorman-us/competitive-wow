@@ -20,6 +20,10 @@ public abstract class Obstacle {
     public abstract void onTopEffect(Player player);
     public abstract void draw(Graphics2D g, int tileSize);
 
+    public Vector getPosition() {
+        return position;
+    }
+
     public void calculateOnTop(Player player) {
         if(position.checkAdjacent(player.getPosition())) {
             adjacentEffect(player);

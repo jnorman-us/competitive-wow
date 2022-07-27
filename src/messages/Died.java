@@ -1,6 +1,5 @@
 package messages;
 
-import types.Direction;
 import types.Vector;
 
 public class Died extends Message {

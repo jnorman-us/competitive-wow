@@ -63,14 +63,14 @@ public class Vector implements Serializable {
         return y;
     }
 
-    public void move(Direction d) {
-        if(d == Direction.UP) {
+    public void move(Action d) {
+        if(d == Action.MOVE_UP) {
             y --;
-        } else if(d == Direction.DOWN) {
+        } else if(d == Action.MOVE_DOWN) {
             y ++;
-        } else if(d == Direction.LEFT) {
+        } else if(d == Action.MOVE_LEFT) {
             x --;
-        } else if(d == Direction.RIGHT) {
+        } else if(d == Action.MOVE_RIGHT) {
             x ++;
         }
     }

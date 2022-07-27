@@ -1,5 +1,5 @@
 import ai.ClientAI;
-import types.Direction;
+import types.Action;
 import types.Vector;
 
 import java.io.IOException;
@@ -15,8 +15,8 @@ public class YourAI extends ClientAI {
     }
 
     @Override
-    public Direction think() {
-        return Direction.UP;
+    public Action think() {
+        return Action.MOVE_UP;
     }
 
     @Override

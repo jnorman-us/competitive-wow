@@ -12,7 +12,9 @@ public class Gold extends Obstacle {
 
     @Override
     public void adjacentEffect(Player player) {
-        player.setShiny();
+        if(!player.alreadyCollected(this)) {
+            player.setShiny();
+        }
     }
 
     @Override

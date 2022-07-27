@@ -1,8 +1,12 @@
 package game;
 
+import messages.RequestThink;
+import obstacles.Gold;
+import obstacles.Monster;
 import obstacles.Obstacle;
 import messages.Decision;
 import messages.InitWorld;
+import obstacles.Pit;
 import server.Receiver;
 import types.Bounds;
 import types.User;
@@ -22,6 +26,9 @@ public class Game implements Receiver, Bounds, EntityDirectory {
 
     private int goldInRound;
     private ArrayList<Obstacle> obstacles;
+    private ArrayList<Pit> pits;
+    private ArrayList<Gold> golds;
+    private ArrayList<Monster> monsters;
 
     private ReentrantLock lock;
     private Condition roundFinishedCondition;
@@ -33,6 +40,9 @@ public class Game implements Receiver, Bounds, EntityDirectory {
         }
         goldInRound = 0;
         obstacles = new ArrayList<>();
+        pits = new ArrayList<>();
+        golds = new ArrayList<>();
+        monsters = new ArrayList<>();
 
         lock = new ReentrantLock();
         roundFinishedCondition = lock.newCondition();
@@ -55,6 +65,15 @@ public class Game implements Receiver, Bounds, EntityDirectory {
         obstacles.addAll(map.golds);
         obstacles.addAll(map.monsters);
 
+        pits.clear();
+        pits.addAll(map.pits);
+
+        golds.clear();
+        golds.addAll(map.golds);
+
+        monsters.clear();
+        monsters.addAll(map.monsters);
+
         goldInRound = map.golds.size();
 
         for(User user : players.keySet()) {
@@ -71,7 +90,12 @@ public class Game implements Receiver, Bounds, EntityDirectory {
                 Player player = players.get(user);
                 player.resetReceived();
                 if(!player.isDead()) {
-                    publisher.sendMessage(user, player.generateRequestThink());
+                    publisher.sendMessage(user, new RequestThink(
+                            player.getPosition(),
+                            player.isSmelly(),
+                            player.isWindy(),
+                            player.isShiny()
+                    ));
                 }
             }
             while(!roundFinished()) {
@@ -121,7 +145,7 @@ public class Game implements Receiver, Bounds, EntityDirectory {
 
             if(!player.hasReceived() && !player.isDead()) {
                 player.clearSensors();
-                player.move(message.movement());
+                player.act(message.getAction());
 
                 for(Obstacle obstacle : obstacles) {
                     obstacle.calculateOnTop(player);
@@ -147,5 +171,14 @@ public class Game implements Receiver, Bounds, EntityDirectory {
     @Override
     public Map<User, Player> getPlayers() {
         return players;
+    }
+
+    public Monster getMonsterAt(Vector position) {
+        for(Monster monster : monsters) {
+            if(monster.getPosition().equals(position)) {
+                return monster;
+            }
+        }
+        return null;
     }
 }

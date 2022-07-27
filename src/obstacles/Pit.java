@@ -18,7 +18,7 @@ public class Pit extends Obstacle {
 
     @Override
     public void onTopEffect(Player player) {
-        player.fall();
+        player.kill();
     }
 
     @Override

@@ -13,12 +13,16 @@ public class Monster extends Obstacle {
 
     @Override
     public void adjacentEffect(Player player) {
-        player.setSmelly();
+        if(!player.alreadyKilled(this)) {
+            player.setSmelly();
+        }
     }
 
     @Override
     public void onTopEffect(Player player) {
-        player.eat();
+        if(!player.alreadyKilled(this)) {
+            player.kill();
+        }
     }
 
     @Override

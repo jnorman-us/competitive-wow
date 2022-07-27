@@ -1,7 +1,6 @@
 package robot;
 
 import types.Bounds;
-import types.Direction;
 import types.Vector;
 
 public abstract class Robot {
@@ -14,15 +13,19 @@ public abstract class Robot {
         position = p;
     }
 
-    protected boolean isSmelly() {
+    public boolean isSmelly() {
         return smelly;
     }
 
-    protected boolean isWindy() {
+    public boolean isWindy() {
         return windy;
     }
 
-    protected boolean isShiny() {
+    public boolean isShiny() {
         return shiny;
+    }
+
+    public Vector getPosition() {
+        return position;
     }
 }

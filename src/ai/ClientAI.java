@@ -4,8 +4,8 @@ import client.TCPWorker;
 import messages.*;
 import robot.Robot;
 import client.Receiver;
+import types.Action;
 import types.Bounds;
-import types.Direction;
 import types.Vector;
 
 import java.io.IOException;
@@ -20,7 +20,7 @@ public abstract class ClientAI extends Robot implements Receiver {
     }
 
     public abstract void start();
-    public abstract Direction think();
+    public abstract Action think();
     public abstract void died();
     public abstract void goldAcquired(Vector position);
 
@@ -38,8 +38,8 @@ public abstract class ClientAI extends Robot implements Receiver {
         windy = message.windy;
         shiny = message.shiny;
 
-        Direction toMove = think();
-        worker.send(new Decision(toMove));
+        Action action = think();
+        worker.send(new Decision(action));
     }
 
     @Override

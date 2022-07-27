@@ -1,18 +1,18 @@
 package messages;
 
-import types.Direction;
+import types.Action;
 
 public class Decision extends Message {
     public static final String TYPE = "Decision";
 
-    public Direction toMove;
+    public Action action;
 
-    public Decision(Direction t) {
+    public Decision(Action a) {
         super(TYPE);
-        toMove = t;
+        action = a;
     }
 
-    public Direction movement() {
-        return toMove;
+    public Action getAction() {
+        return action;
     }
 }
