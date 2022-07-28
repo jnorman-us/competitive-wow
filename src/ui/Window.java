@@ -70,35 +70,42 @@ public class Window implements PlayerStatusListener, FlowListener, OnlineListene
     public void matchFinish() {
         scoreboard.updateAll(UserCols.DEAD, BooleanCol.FALSE);
         scoreboard.updateAll(UserCols.GOLD, "" + 0);
+        canvas.repaint();
     }
 
     @Override
     public void playerDied(User user) {
         scoreboard.updateUser(user, UserCols.DEAD, BooleanCol.TRUE);
+        canvas.repaint();
     }
 
     @Override
     public void playerResponded(User user) {
         scoreboard.updateUser(user, UserCols.RESPONDED, BooleanCol.TRUE);
+        canvas.repaint();
     }
 
     @Override
     public void playerScoreUpdate(User user, int score) {
         scoreboard.updateUser(user, UserCols.SCORE, "" + score);
+        canvas.repaint();
     }
 
     @Override
     public void playerGoldUpdate(User user, int collected) {
         scoreboard.updateUser(user, UserCols.GOLD, "" + collected);
+        canvas.repaint();
     }
 
     @Override
     public void userConnected(User user) {
         scoreboard.updateUser(user, UserCols.ONLINE, BooleanCol.TRUE);
+        canvas.repaint();
     }
 
     @Override
     public void userDisconnected(User user) {
         scoreboard.updateUser(user, UserCols.ONLINE, BooleanCol.FALSE);
+        canvas.repaint();
     }
 }

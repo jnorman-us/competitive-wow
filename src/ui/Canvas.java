@@ -31,22 +31,27 @@ public class Canvas extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
 
-        Graphics2D g2d = (Graphics2D) g;
-        clear(g2d);
+        directory.startDraw();
+        try {
+            Graphics2D g2d = (Graphics2D) g;
+            clear(g2d);
 
-        for(Obstacle obstacle : directory.getObstacles()) {
-            obstacle.draw(g2d, TILE_SIZE);
-        }
-
-        HashMap<Vector, Integer> slots = new HashMap<>();
-        for(Player player : directory.getPlayers().values()) {
-            Vector position = player.getPosition();
-            if(!slots.containsKey(position)) {
-                slots.put(position, 0);
+            for (Obstacle obstacle : directory.getObstacles()) {
+                obstacle.draw(g2d, TILE_SIZE);
             }
-            int slot = slots.get(position);
-            player.draw(g2d, TILE_SIZE, slot);
-            slots.put(position, slot + 1);
+
+            HashMap<Vector, Integer> slots = new HashMap<>();
+            for (Player player : directory.getPlayers().values()) {
+                Vector position = player.getPosition();
+                if (!slots.containsKey(position)) {
+                    slots.put(position, 0);
+                }
+                int slot = slots.get(position);
+                player.draw(g2d, TILE_SIZE, slot);
+                slots.put(position, slot + 1);
+            }
+        } finally {
+            directory.endDraw();
         }
     }
 

@@ -75,15 +75,12 @@ public class Main {
                 game.initFromMap(world);
                 window.matchStart();
 
-                Thread.sleep(1000);
-
                 while(!game.finished()) {
                     window.roundStart();
                     game.playRound();
-                    Thread.sleep(500);
                     window.roundFinish();
                 }
-                Thread.sleep(1000);
+                Thread.sleep(2000);
                 window.matchFinish();
             } catch (IOException e) {
                 System.out.println("Failed to read world file");

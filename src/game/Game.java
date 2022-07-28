@@ -181,4 +181,12 @@ public class Game implements Receiver, Bounds, EntityDirectory {
         }
         return null;
     }
+
+    public void startDraw() {
+        lock.lock();
+    }
+
+    public void endDraw() {
+        lock.unlock();
+    }
 }
