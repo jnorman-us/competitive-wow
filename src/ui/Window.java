@@ -18,9 +18,9 @@ public class Window implements PlayerStatusListener, FlowListener, OnlineListene
     private JFrame scoreboardWindow;
     private JFrame canvasWindow;
 
-    public Window(List<User> users) {
+    public Window(List<User> users, int tileSize) {
         scoreboard = new Scoreboard(users);
-        canvas = new Canvas();
+        canvas = new Canvas(tileSize);
     }
 
     public void showScoreboard() {
@@ -62,6 +62,7 @@ public class Window implements PlayerStatusListener, FlowListener, OnlineListene
     @Override
     public void matchStart() {
         canvas.init();
+        canvas.repaint();
         canvasWindow.pack();
     }
 

@@ -44,6 +44,7 @@ public class Player extends Robot {
     }
     public void kill() {
         dead = true;
+        addToScore(-100);
         game.publisher.sendMessage(this.user, new Died(position));
         game.statusListener.playerDied(user);
     }
@@ -56,7 +57,6 @@ public class Player extends Robot {
     public void reset() {
         clearSensors();
         dead = false;
-        score = 0;
         position.set(0, 0);
         goldCollected.clear();
         monstersKilled.clear();
@@ -90,7 +90,7 @@ public class Player extends Robot {
                 shootAt.add(1, 0);
                 break;
         }
-        addToScore(-250); // all shooting incur a 200pt cost
+        addToScore(-30); // all shooting incur a 200pt cost
 
         Monster shotMonster = game.getMonsterAt(shootAt);
         if(shotMonster != null) {
@@ -102,7 +102,7 @@ public class Player extends Robot {
     public int monstersKilled() { return monstersKilled.size(); }
     public void killMonster(Monster m) {
         monstersKilled.add(m);
-        addToScore(500);
+        addToScore(70);
     }
 
     public boolean alreadyCollected(Gold g) {
@@ -113,7 +113,7 @@ public class Player extends Robot {
     }
     public void acquire(Gold g) {
         goldCollected.add(g);
-        addToScore(500);
+        addToScore(100);
         game.publisher.sendMessage(this.user, new AcquiredGold(position, goldCollected()));
         game.statusListener.playerGoldUpdate(user, goldCollected());
     }

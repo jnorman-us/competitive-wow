@@ -167,7 +167,6 @@ public class Server implements Runnable, Publisher {
 
     @Override
     public void sendMessage(User user, Message message) {
-        System.out.println(clients);
         if(connected(user)) {
             clients.get(user).send(message);
         }

@@ -10,13 +10,14 @@ import java.awt.geom.Ellipse2D;
 import java.util.HashMap;
 
 public class Canvas extends JPanel {
-    private static final int TILE_SIZE = 80;
+    private int TILE_SIZE = 80;
 
     private EntityDirectory directory;
 
     private Vector canvasDimensions;
 
-    public Canvas() {
+    public Canvas(int tileSize) {
+        TILE_SIZE = tileSize;
         setVisible(true);
 
         canvasDimensions = new Vector();

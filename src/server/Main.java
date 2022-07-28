@@ -11,10 +11,11 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        if(args.length != 3) return;
+        if(args.length != 4) return;
         int port = Integer.parseInt(args[0]);
-        String mapsDirectoryPath = args[1];
-        String usersFilePath = args[2];
+        int tileSize = Integer.parseInt(args[1]);
+        String mapsDirectoryPath = args[2];
+        String usersFilePath = args[3];
 
         // LOAD USERS FROM FILE
         ArrayList<User> players = new ArrayList<>();
@@ -34,7 +35,7 @@ public class Main {
             return;
         }
 
-        Window window = new Window(players);
+        Window window = new Window(players, tileSize);
 
         // INITIALIZE GAME
         Server server = null;
@@ -73,6 +74,8 @@ public class Main {
                 WorldMap world = new WorldMap(mapFile);
                 game.initFromMap(world);
                 window.matchStart();
+
+                Thread.sleep(1000);
 
                 while(!game.finished()) {
                     window.roundStart();
