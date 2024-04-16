@@ -20,6 +20,9 @@ attempt to guess what the world around them is like (i.e. if the tile
 next to them is dangerous or not). By combining their observations with
 logic, they can more confidently reach their objectives.
 
+![unknown](https://github.com/jnorman-us/competitive-wow/assets/9342286/ea9056ab-c713-4e96-b178-0e102ecb7bfe)
+
+
 ## Competition
 This program is split up into a competition server and the client AIs.
 The server is already implemented along with the client networking code.
